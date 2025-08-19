@@ -224,17 +224,46 @@ export default function Home() {
               </>
             ) : (
               <div>
-                <h3 className="text-xl font-bold mb-2 text-center">Selesai! 🎉</h3>
-                <p className="text-center">Skor kamu: {score} / {selectedCategory.questions.length}</p>
-                <p className="text-center mb-4">Persentase benar: {((score / selectedCategory.questions.length) * 100).toFixed(0)}%</p>
-                <div className="text-center">
-                  <button
-                    onClick={() => setReviewMode(true)}
-                    className="mt-4 bg-[#658147] text-white px-6 py-2 rounded-lg hover:opacity-90"
-                  >
-                    Review Jawaban
-                  </button>
-                </div>
+                <div>
+                 <h3 className="text-xl font-bold mb-2 text-center">Selesai! 🎉</h3>
+                 <p className="text-center">Skor kamu: {score} / {selectedCategory.questions.length}</p>
+                 <p className="text-center mb-4">
+                   Persentase benar: {((score / selectedCategory.questions.length) * 100).toFixed(0)}%
+                 </p>
+                 <div className="text-center">
+                   <button
+                     onClick={() => setReviewMode(true)}
+                     className="mt-4 bg-[#658147] text-white px-6 py-2 rounded-lg hover:opacity-90"
+                   >
+                     Review Jawaban
+                   </button>
+                 </div>
+                 <div className="text-center">
+                   <button
+                     onClick={async () => {
+                       const nama = prompt("Masukkan nama kamu:");
+                       if (!nama) {
+                         alert("Nama wajib diisi!");
+                         return;
+                       }
+                       const res = await fetch("/api/jawaban", {
+                         method: "POST",
+                         headers: {
+                           "Content-Type": "application/json",
+                         },
+                         body: JSON.stringify({ nama, score }),
+                       });
+                       if (res.ok) {
+                         alert("Hasil kuis berhasil disimpan!");
+                       } else {
+                         alert("Gagal menyimpan hasil kuis.");
+                       }
+                     }}
+                     className="mt-2 bg-[#729762] text-white px-6 py-2 rounded-lg hover:opacity-90"
+                   >
+                     Simpan Hasil
+                   </button>
+                 </div>
               </div>
             )}
           </div>
